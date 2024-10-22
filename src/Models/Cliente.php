@@ -39,6 +39,7 @@ class Cliente extends Database
                 id, nome, email, telefone, endereco_id
             FROM 
                 cliente
+                   JOIN endereco ON cliente.endereco_id = endereco.id
             WHERE 
                 id = ?
         ');
@@ -55,14 +56,47 @@ class Cliente extends Database
 
         $stmt = $pdo->prepare('
             SELECT 
-                id, nome, email, telefone, endereco_id
+                cliente.id as cliente_id, nome, email, telefone, endereco.id AS endereco_id,
+            endereco.rua,
+            endereco.cep,
+            endereco.cidade,
+            endereco.estado
             FROM 
                 cliente
+               inner JOIN endereco ON cliente.endereco_id = endereco.id
         ');
 
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $clientes = [];
+    
+        foreach ($resultados as $linha) {
+            $clienteId = $linha['cliente_id'];
+    
+            // Se o cliente ainda não foi adicionado no array, inicializa
+            if (!isset($clientes[$clienteId])) {
+                $clientes[$clienteId] = [
+                    'id' => $linha['cliente_id'],
+                    'nome' => $linha['nome'],
+                    'email' => $linha['email'],
+                    'telefone' => $linha['telefone'],
+                    'enderecos' => [] // Inicializa o array de endereços
+                ];
+            }
+    
+            // Adiciona o endereço ao array de endereços do cliente
+            $clientes[$clienteId]['enderecos'][] = [
+                'id' => $linha['endereco_id'],
+                'rua' => $linha['rua'],
+                'cep' => $linha['cep'],
+                'cidade' => $linha['cidade'],
+                'estado' => $linha['estado']
+            ];
+        }
+    
+        // Reindexa para garantir que a estrutura seja um array simples e não associativo por IDs
+        return array_values($clientes);
     }
 
     public static function update(int|string $id, array $data)
@@ -81,7 +115,7 @@ class Cliente extends Database
                 id = ?
         ');
 
-        $stmt->execute([$data['nome'], $data['email'], $data['telefone'],  $data['enderoco_id'], $id]);  //Defini os campos que serão afetados para UserService.php
+        $stmt->execute([$data['nome'], $data['email'], $data['telefone'],  $data['endereco_id'], $id]);  //Defini os campos que serão afetados para ClienteService.php
 
         return $stmt->rowCount() > 0 ? true : false;
     }

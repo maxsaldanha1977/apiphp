@@ -30,11 +30,11 @@ class ClienteController
     }
 
   
-    public function fetch(Request $request, Response $response)
+    public function fetch(Request $request, Response $response, array $id)
     {
         $authorization = $request::authorization();
 
-        $clienteService = ClienteService::fetch($authorization);
+        $clienteService = ClienteService::fetch($authorization, $id[0]);
 
         if (isset($clienteService['unauthorized'])) {
             return $response::json([
@@ -90,13 +90,13 @@ class ClienteController
         return;
     }
 
-    public function update(Request $request, Response $response)
+    public function update(Request $request, Response $response, array $id)
     {
         $authorization = $request::authorization();
 
         $body = $request::body();
 
-        $clienteService = ClienteService::update($authorization, $body);
+        $clienteService = ClienteService::update($authorization, $body, $id[0]);
 
         if (isset($clienteService['unauthorized'])) {
             return $response::json([

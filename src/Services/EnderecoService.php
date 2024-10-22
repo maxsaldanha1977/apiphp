@@ -6,7 +6,7 @@ use App\Http\JWT;
 use App\Utils\Validator;
 use Exception;
 use PDOException;
-use App\Models\Cliente;
+use App\Models\Endereco;
 
 class EnderecoService
 {
@@ -14,16 +14,17 @@ class EnderecoService
     {
         try {
             $fields = Validator::validate([
-                'nome'     => $data['nome']     ?? '',
-                'email'    => $data['email']    ?? '',
-                'telefone' => $data['telefone'] ?? ''
+                'rua'     => $data['rua']     ?? '',
+                'cidade'    => $data['cidade']    ?? '',
+                'estado'    => $data['estado']    ?? '',
+                'cep' => $data['cep'] ?? ''
             ]);
            
-            $cliente = Cliente::save($fields);
+            $endereco = Endereco::save($fields);
 
-            if (!$cliente) return ['error' => 'Sorry, we could not create your account.'];
+            if (!$endereco) return ['error' => 'Sorry, we could not create your account.'];
 
-            return "cliente created successfully!";
+            return "endereco created successfully!";
         } catch (PDOException $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
             if ($e->errorInfo[0] === '23505') return ['error' => 'Desculpe, já existe um usuário com o email informado.'];
@@ -43,15 +44,15 @@ class EnderecoService
                 return ['unauthorized' => $authorization['error']];
             }
 
-            $clienteFromJWT = JWT::verify($authorization);
+            $enderecoFromJWT = JWT::verify($authorization);
 
-            if (!$clienteFromJWT) return ['unauthorized' => "Please, login to access this resource."];
+            if (!$enderecoFromJWT) return ['unauthorized' => "Please, login to access this resource."];
 
-            $cliente = Cliente::find($clienteFromJWT['id']);
+            $endereco = Endereco::find($enderecoFromJWT['id']);
 
-            if (!$cliente) return ['error' => 'Sorry, we could not find your account.'];
+            if (!$endereco) return ['error' => 'Sorry, we could not find your account.'];
 
-            return $cliente;
+            return $endereco;
         } catch (PDOException $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
             return ['error' => $e->errorInfo[0]];
@@ -67,15 +68,15 @@ class EnderecoService
                 return ['unauthorized' => $authorization['error']];
             }
 
-            $clienteFromJWT = JWT::verify($authorization);
+            $enderecoFromJWT = JWT::verify($authorization);
 
-            if (!$clienteFromJWT) return ['unauthorized' => "Please, login to access this resource."];
+            if (!$enderecoFromJWT) return ['unauthorized' => "Please, login to access this resource."];
 
-            $cliente = Cliente::findAll();
+            $endereco = Endereco::findAll();
 
-            if (!$cliente) return ['error' => 'Sorry, we could not find your account.'];
+            if (!$endereco) return ['error' => 'Sorry, we could not find your account.'];
 
-            return $cliente;
+            return $endereco;
         } catch (PDOException $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
             return ['error' => $e->errorInfo[0]];
@@ -91,21 +92,21 @@ class EnderecoService
                 return ['unauthorized' => $authorization['error']];
             }
 
-            $clienteFromJWT = JWT::verify($authorization);
+            $enderecoFromJWT = JWT::verify($authorization);
 
-            if (!$clienteFromJWT) return ['unauthorized' => "Please, login to access this resource."];
-            //Defini os campos que serão afetados vindo da cliente.php
+            if (!$enderecoFromJWT) return ['unauthorized' => "Please, login to access this resource."];
+            //Defini os campos que serão afetados vindo da endereco.php
             $fields = Validator::validate([
                 'name' => $data['name'] ?? '',
                 'email'    => $data['email']    ?? '',
                 'password' => $data['password'] ?? '',
             ]);
 
-            $cliente = Cliente::update($clienteFromJWT['id'], $fields);
+            $endereco = Endereco::update($enderecoFromJWT['id'], $fields);
 
-            if (!$cliente) return ['error' => 'Sorry, we could not update your account.'];
+            if (!$endereco) return ['error' => 'Sorry, we could not update your account.'];
 
-            return "cliente updated successfully!";
+            return "endereco updated successfully!";
         } catch (PDOException $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
             return ['error' => $e->getMessage()];
@@ -121,15 +122,15 @@ class EnderecoService
                 return ['unauthorized' => $authorization['error']];
             }
 
-            $clienteFromJWT = JWT::verify($authorization);
+            $enderecoFromJWT = JWT::verify($authorization);
 
-            if (!$clienteFromJWT) return ['unauthorized' => "Please, login to access this resource."];
+            if (!$enderecoFromJWT) return ['unauthorized' => "Please, login to access this resource."];
 
-            $cliente = Cliente::delete($id);
+            $endereco = Endereco::delete($id);
 
-            if (!$cliente) return ['error' => 'Sorry, we could not delete your account.'];
+            if (!$endereco) return ['error' => 'Sorry, we could not delete your account.'];
 
-            return "cliente deleted successfully!";
+            return "endereco deleted successfully!";
         } catch (PDOException $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
             return ['error' => $e->getMessage()];

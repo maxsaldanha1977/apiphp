@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Database;
 use PDO;
 
-class Cliente extends Database
+class Endereco extends Database
 {
     public static function save(array $data)
     {

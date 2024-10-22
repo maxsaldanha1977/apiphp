@@ -16,7 +16,8 @@ class ClienteService
             $fields = Validator::validate([
                 'nome'     => $data['nome']     ?? '',
                 'email'    => $data['email']    ?? '',
-                'telefone' => $data['telefone'] ?? ''
+                'telefone' => $data['telefone'] ?? '',
+                 'endereco_id' => $data['endereco_id'] ?? ''
             ]);
            
             $cliente = Cliente::save($fields);
@@ -36,7 +37,7 @@ class ClienteService
     }
 
     
-    public static function fetch(mixed $authorization)
+    public static function fetch(mixed $authorization, int|string $id)
     {
         try {
             if (isset($authorization['error'])) {
@@ -47,7 +48,7 @@ class ClienteService
 
             if (!$clienteFromJWT) return ['unauthorized' => "Please, login to access this resource."];
 
-            $cliente = Cliente::find($clienteFromJWT['id']);
+            $cliente = Cliente::find($id);
 
             if (!$cliente) return ['error' => 'Sorry, we could not find your account.'];
 
@@ -84,7 +85,7 @@ class ClienteService
         }
     }
     
-    public static function update(mixed $authorization, array $data)
+    public static function update(mixed $authorization, array $data, int|string $id)
     {
         try {
             if (isset($authorization['error'])) {
@@ -96,12 +97,13 @@ class ClienteService
             if (!$clienteFromJWT) return ['unauthorized' => "Please, login to access this resource."];
             //Defini os campos que serão afetados vindo da cliente.php
             $fields = Validator::validate([
-                'name' => $data['name'] ?? '',
+                'nome' => $data['nome'] ?? '',
                 'email'    => $data['email']    ?? '',
-                'password' => $data['password'] ?? '',
+                'telefone' => $data['telefone'] ?? '',
+                'endereco_id' => $data['endereco_id'] ?? ''
             ]);
 
-            $cliente = Cliente::update($clienteFromJWT['id'], $fields);
+            $cliente = Cliente::update($id, $fields);
 
             if (!$cliente) return ['error' => 'Sorry, we could not update your account.'];
 
