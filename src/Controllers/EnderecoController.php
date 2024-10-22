@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Controllers;
 
@@ -29,7 +29,7 @@ class EnderecoController
         ], 201);
     }
 
-  
+
     public function fetch(Request $request, Response $response)
     {
         $authorization = $request::authorization();

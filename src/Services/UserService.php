@@ -123,7 +123,7 @@ class UserService
                 'email'    => $data['email']    ?? '',
                 'password' => $data['password'] ?? '',
             ]);
-            
+
             $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
             $user = User::update($userFromJWT['id'], $fields);
 
