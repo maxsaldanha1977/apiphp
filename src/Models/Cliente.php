@@ -67,7 +67,8 @@ class Cliente extends Database
         ');
 
         $stmt->execute();
-
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+/*
         $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $clientes = [];
     
@@ -97,6 +98,7 @@ class Cliente extends Database
     
         // Reindexa para garantir que a estrutura seja um array simples e não associativo por IDs
         return array_values($clientes);
+        */
     }
 
     public static function update(int|string $id, array $data)
