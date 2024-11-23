@@ -4,6 +4,7 @@
         "cliente",
         "endereco",
         "estado",
+        "logradouro",
         "telefone"
     ]
 }

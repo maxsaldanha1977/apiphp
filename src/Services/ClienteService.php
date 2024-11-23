@@ -55,6 +55,7 @@ class ClienteService
             return $cliente;
         } catch (PDOException $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
+            if ($e->errorInfo[0] === '23000') return ['error' => 'Possível duplicação de colunas na instrução.']; //No caso, inner join colunas idênticas sem álias
             return ['error' => $e->errorInfo[0]];
         } catch (Exception $e) {
             return ['error' => $e->getMessage()];

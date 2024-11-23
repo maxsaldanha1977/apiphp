@@ -36,12 +36,17 @@ class Cliente extends Database
 
         $stmt = $pdo->prepare('
             SELECT 
-                id, nome, email, telefone, endereco_id
+                cliente.id, nome, email, telefone,
+                 endereco.rua as logradouro,
+            endereco.numero,
+            endereco.cep,
+            endereco.cidade,
+            endereco.estado
             FROM 
                 cliente
                    JOIN endereco ON cliente.endereco_id = endereco.id
             WHERE 
-                id = ?
+                cliente.id = ?
         ');
 
         $stmt->execute([$id]);
