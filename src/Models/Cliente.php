@@ -74,6 +74,7 @@ class Cliente extends Database
 
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //Trecho para trazer todos os registros associados
 /*
         $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $clientes = [];
