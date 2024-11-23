@@ -53,11 +53,12 @@ class Cliente extends Database
     public static function findAll()
     {
         $pdo = self::getConnection();
-
+/* cliente.id as cliente_id, nome, email, telefone, endereco.id AS endereco_id, */
         $stmt = $pdo->prepare('
             SELECT 
-                cliente.id as cliente_id, nome, email, telefone, endereco.id AS endereco_id,
-            endereco.rua,
+                cliente.id, nome, email, telefone,
+            endereco.rua as logradouro,
+            endereco.numero,
             endereco.cep,
             endereco.cidade,
             endereco.estado

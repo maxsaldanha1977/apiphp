@@ -14,7 +14,7 @@ class User extends Database
         $stmt = $pdo->prepare("
             INSERT 
             INTO 
-                users (name, email, password)
+                user (name, email, password)
             VALUES
                 (?, ?, ?)
         ");
@@ -36,7 +36,7 @@ class User extends Database
             SELECT 
                 *
             FROM 
-                users
+                user
             WHERE 
                 email = ?
         ");
@@ -64,7 +64,7 @@ class User extends Database
             SELECT 
                 id, name, email
             FROM 
-                users
+                user
             WHERE 
                 id = ?
         ');
@@ -82,7 +82,7 @@ class User extends Database
             SELECT 
                 id, name, email
             FROM 
-                users
+                user
         ');
 
         $stmt->execute();
@@ -97,7 +97,7 @@ class User extends Database
         
         $stmt = $pdo->prepare('
             UPDATE 
-                users
+                user
             SET 
                 name = ?,
                 email = ?,
@@ -118,7 +118,7 @@ class User extends Database
         $stmt = $pdo->prepare('
             DELETE 
             FROM 
-                users
+                user
             WHERE 
                 id = ?
         ');

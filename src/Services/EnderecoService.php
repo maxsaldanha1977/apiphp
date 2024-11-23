@@ -14,12 +14,13 @@ class EnderecoService
     {
         try {
             $fields = Validator::validate([
-                'rua'     => $data['rua']     ?? '',
-                'cidade'    => $data['cidade']    ?? '',
-                'estado'    => $data['estado']    ?? '',
-                'cep' => $data['cep'] ?? ''
+                'rua' => $data['rua'] ?? '',
+                'numero' => $data['numero'] ?? '',
+                'cidade' => $data['cidade'] ?? '',
+                'estado' => $data['estado'] ?? '',
+                'cep' => $data['cep'] ?? '',
             ]);
-           
+
             $endereco = Endereco::save($fields);
 
             if (!$endereco) return ['error' => 'Sorry, we could not create your account.'];
@@ -36,8 +37,7 @@ class EnderecoService
         }
     }
 
-    
-    public static function fetch(mixed $authorization)
+    public static function fetch(mixed $authorization, int|string $id)
     {
         try {
             if (isset($authorization['error'])) {
@@ -48,7 +48,7 @@ class EnderecoService
 
             if (!$enderecoFromJWT) return ['unauthorized' => "Please, login to access this resource."];
 
-            $endereco = Endereco::find($enderecoFromJWT['id']);
+            $endereco = Endereco::find($id);
 
             if (!$endereco) return ['error' => 'Sorry, we could not find your account.'];
 
@@ -84,8 +84,7 @@ class EnderecoService
             return ['error' => $e->getMessage()];
         }
     }
-    
-    public static function update(mixed $authorization, array $data)
+    public static function update(mixed $authorization, array $data, int|string $id)
     {
         try {
             if (isset($authorization['error'])) {
@@ -95,18 +94,20 @@ class EnderecoService
             $enderecoFromJWT = JWT::verify($authorization);
 
             if (!$enderecoFromJWT) return ['unauthorized' => "Please, login to access this resource."];
-            //Defini os campos que serão afetados vindo da endereco.php
+            //Defini os campos que serão afetados vindo da cliente.php
             $fields = Validator::validate([
-                'name' => $data['name'] ?? '',
-                'email'    => $data['email']    ?? '',
-                'password' => $data['password'] ?? '',
+                'rua' => $data['rua'] ?? '',
+                'numero' => $data['numero'] ?? '',
+                'cidade' => $data['cidade'] ?? '',
+                'estado' => $data['estado'] ?? '',
+                'cep' => $data['cep'] ?? '',
             ]);
 
-            $endereco = Endereco::update($enderecoFromJWT['id'], $fields);
+            $endereco = Endereco::update($id, $fields);
 
             if (!$endereco) return ['error' => 'Sorry, we could not update your account.'];
 
-            return "endereco updated successfully!";
+            return "cliente updated successfully!";
         } catch (PDOException $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
             return ['error' => $e->getMessage()];

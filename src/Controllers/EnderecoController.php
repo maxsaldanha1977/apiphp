@@ -30,11 +30,11 @@ class EnderecoController
     }
 
 
-    public function fetch(Request $request, Response $response)
+    public function fetch(Request $request, Response $response, array $id)
     {
         $authorization = $request::authorization();
 
-        $enderecoService = EnderecoService::fetch($authorization);
+        $enderecoService = EnderecoService::fetch($authorization, $id[0]);
 
         if (isset($enderecoService['unauthorized'])) {
             return $response::json([
@@ -90,13 +90,13 @@ class EnderecoController
         return;
     }
 
-    public function update(Request $request, Response $response)
+    public function update(Request $request, Response $response, array $id)
     {
         $authorization = $request::authorization();
 
         $body = $request::body();
 
-        $enderecoService = EnderecoService::update($authorization, $body);
+        $enderecoService = EnderecoService::update($authorization, $body, $id[0]);
 
         if (isset($enderecoService['unauthorized'])) {
             return $response::json([

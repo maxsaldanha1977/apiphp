@@ -36,7 +36,7 @@ class Endereco extends Database
 
         $stmt = $pdo->prepare('
             SELECT 
-                id, rua, cidade, estado, cep
+                id, rua, numero, cidade, estado, cep
             FROM 
                 endereco
             WHERE 
@@ -55,7 +55,7 @@ class Endereco extends Database
 
         $stmt = $pdo->prepare('
             SELECT 
-                id, rua, cidade, estado, cep
+                id, rua, numero, cidade, estado, cep
             FROM 
                 endereco
         ');
@@ -74,6 +74,7 @@ class Endereco extends Database
                 endereco
             SET 
                rua = ?, 
+               numero = ?,
                cidade = ?, 
                estado = ?, 
                cep = ?
@@ -81,7 +82,7 @@ class Endereco extends Database
                 id = ?
         ');
 
-        $stmt->execute([$data['rua'], $data['cidade'], $data['estado'],  $data['enderoco_id'], $id]);  //Defini os campos que serão afetados para UserService.php
+        $stmt->execute([$data['rua'], $data['numero'], $data['cidade'], $data['estado'],  $data['cep'], $id]);  //Defini os campos que serão afetados para UserService.php
 
         return $stmt->rowCount() > 0 ? true : false;
     }
